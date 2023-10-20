@@ -57,12 +57,16 @@ class UserCreateView(CreateView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
-    template_name = 'accounts/user_form.html'
+    template_name = 'accounts/profile.html'
+    model = User
     
     def get_success_url(self):
         return reverse_lazy('profile', kwargs={'pk': self.object.pk})  # Redirect to user's profile page after successful update
 
     def get_object(self, queryset=None):
+        print(self.request.user.id)
+        return self.model.objects.get(id=self.request.user.id)
+    
         obj = super().get_object(queryset=queryset)
         if not obj.id == self.request.user.id:  # Ensure users can only update their own profile
             raise PermissionDenied()
