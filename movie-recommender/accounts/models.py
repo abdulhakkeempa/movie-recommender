@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser , BaseUserManager,PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser , BaseUserManager,PermissionsMixin, Group, Permission
 import datetime
+from django.utils.translation import gettext as _
 
 # Create your models here.
 
@@ -55,11 +56,36 @@ class User(AbstractBaseUser,PermissionsMixin):
   is_superuser = models.BooleanField(default = False)
 
   USERNAME_FIELD = 'email'
-  REQUIRED_FIELDS = ['name','first_name', 'last_name', 'date_of_birth']
+  REQUIRED_FIELDS = ['first_name', 'last_name', 'date_of_birth']
+
+  groups = models.ManyToManyField(
+    Group,
+    verbose_name=_('groups'),
+    blank=True,
+    help_text=_(
+        'The groups this user belongs to. A user will get all permissions '
+        'granted to each of their groups.'
+    ),
+    related_name="%(app_label)s_%(class)s_related",
+    related_query_name="%(app_label)s_%(class)ss",
+  )
+  user_permissions = models.ManyToManyField(
+    Permission,
+    verbose_name=_('user permissions'),
+    blank=True,
+    help_text=_('Specific permissions for this user.'),
+    related_name="%(app_label)s_%(class)s_related",
+    related_query_name="%(app_label)s_%(class)ss",
+  )
+
 
   objects = UserManager()
 
   def __str__(self):
+      return self.first_name + " " + self.last_name
+  
+  @property
+  def name(self):
       return self.first_name + " " + self.last_name
 
   def age(self):
