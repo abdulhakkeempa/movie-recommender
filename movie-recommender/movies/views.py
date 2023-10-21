@@ -5,3 +5,7 @@ from django.views import View
 class Movies(View):
   def get(self, request):
     return render(request, 'movies/movies.html')
+  
+
+def get_movies(request, pk):
+  return render(request, 'movies/movies-individual.html')
