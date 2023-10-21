@@ -26,6 +26,13 @@
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
   }
 
+  .gap-20{
+    gap: 20px;
+  }
+
+  .gap-10{
+    gap: 10px;
+  }
 
   #movies {
     position: absolute;
@@ -68,10 +75,44 @@
 
     </p>
 
-    <a href="" class="btn btn-primary">Watch now</a>
+    <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Watch now</a>
 
   </div>
 
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Hope you have enjoyed the movie, your review helps us to recommend more contents for you</p>
+
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="d-flex flex-column">
+              <label for="review">Rating</label>
+              <div class="d-flex gap-10">
+                <input type="range" name="review" min="0" max="5" increment="1" value="0" id="" oninput="this.nextElementSibling.value = this.value">
+                <output>0</output>  
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-center gap-10">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>  
+            </div>
+  
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 </section>
