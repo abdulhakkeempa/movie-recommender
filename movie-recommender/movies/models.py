@@ -26,8 +26,22 @@ class Movie(models.Model):
     def get_genres(self):
         return self.genres.all()
     
-    def get_genres_names(self):
+    def get_reviews(self):
+        return self.usermovierating_set.all()
+    
+    @property
+    def genres_names(self):
         return [genre.name for genre in self.get_genres()]
+
+    @property
+    def get_review_values(self):
+        reviews = self.get_reviews()
+        ratings = [review.rating for review in reviews]
+        try:
+            ratings = sum(ratings)/len(ratings)
+        except ZeroDivisionError:
+            ratings = 0
+        return ratings
     
 
 class UserMovieRating(models.Model):
@@ -38,3 +52,6 @@ class UserMovieRating(models.Model):
         null=False,
         validators=[MaxValueValidator(5), MinValueValidator(0)],
     )
+
+    def __str__(self) -> str:
+        return self.user.first_name + ' - ' + self.movie.title
