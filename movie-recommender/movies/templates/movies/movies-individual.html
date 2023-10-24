@@ -56,23 +56,35 @@
 
   <div id="movie-detail" class="mt-4 mb-4">
     
-    <h2>Movie Title</h2>
-    <div class="d-flex pt-2 pb-2" style="gap: 10px;">
-      <i class="bi bi-star-fill text-warning"></i>
-      <i class="bi bi-star-fill text-warning"></i>
-      <i class="bi bi-star-fill text-warning"></i>
-      <i class="bi bi-star-fill text-warning"></i>
-      <i class="bi bi-star-half text-warning"></i>
+    <h2>{{ movie.title }}</h2>
+    {% for i in "12345"|make_list %}
+      {% if i|add:0 <= rating|add:0 %}
+        <i class="bi bi-star-fill text-warning"></i>
+      {% elif i|add:-0.5 == rating|add:0 %}
+        <i class="bi bi-star-half text-warning"></i>
+      {% else %}
+        <i class="bi bi-star text-warning"></i>
+      {% endif %}
+    {% endfor %}
+  
+  
+
+    <div class="d-flex pt-2 pb-2" style="gap: 15px">
+      {% for genre in movie.genres_names %}
+        <h5 class="badge text-bg-secondary">{{ genre }}</h5>
+      {% endfor %}
     </div>
+
     <div class="col-6 pt-2 pb-2">
       <div class="d-flex flex-row justify-content-between">
-        <h5 class="text-secondary">2023</h5>
-        <h5 class="text-secondary">Language</h5>
-        <h5 class="text-secondary">Length</h5>
+        <h5 class="text-secondary">{{ movie.release_year }}</h5>
+        <h5 class="text-secondary">{{ movie.language }}</h5>
+        <h5 class="text-secondary">{{ movie.length }} minutes</h5>
       </div>
     </div>
-    <p class="text-white pt-2 pb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
+    <p class="text-white pt-2 pb-2">
+      {{ movie.description }}
+      {{ movie.get_review_values }}
     </p>
 
     <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Watch now</a>
@@ -84,7 +96,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">{{ movie.title }} - Review</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -113,6 +125,7 @@
       </div>
     </div>
   </div>
+
 
 
 </section>
