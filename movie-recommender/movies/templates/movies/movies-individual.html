@@ -57,18 +57,6 @@
   <div id="movie-detail" class="mt-4 mb-4">
     
     <h2>{{ movie.title }}</h2>
-    {% for i in "12345"|make_list %}
-      {% if i|add:0 <= movie.get_review_values|add:0 %}
-        <i class="bi bi-star-fill text-warning"></i>
-      {% elif i|add:-0.5 == movie.get_review_values|add:0 %}
-        <i class="bi bi-star-half text-warning"></i>
-      {% else %}
-        <i class="bi bi-star text-warning"></i>
-      {% endif %}
-    {% endfor %}
-  
-
-  
 
     <div class="d-flex pt-2 pb-2" style="gap: 15px">
       {% for genre in movie.genres_names %}
