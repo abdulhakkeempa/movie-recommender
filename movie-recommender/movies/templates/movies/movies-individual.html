@@ -64,6 +64,18 @@
       {% endfor %}
     </div>
 
+    <div class="d-flex gap-10">
+      {% for rating in global_rating_list %}
+          {% if rating %}
+              <i class="bi bi-star-fill text-warning"></i>
+          {% else %}
+              <i class="bi bi-star text-warning"></i>
+          {% endif %}
+      {% endfor %}
+    </div>
+  
+
+
     <div class="col-6 pt-2 pb-2">
       <div class="d-flex flex-row justify-content-between">
         <h5 class="text-secondary">{{ movie.release_year }}</h5>
@@ -95,8 +107,8 @@
             <div class="d-flex flex-column">
               <label for="review">Rating</label>
               <div class="d-flex gap-10">
-                <input type="range" name="review" min="0" max="5" increment="1" value="0" id="" oninput="this.nextElementSibling.value = this.value">
-                <output>0</output>  
+                <input type="range" name="review" value="{{ user_rating }}"  min="0" max="5" increment="1" value="0" id="" oninput="this.nextElementSibling.value = this.value">
+                <output>{{ user_rating }}</output>  
               </div>
             </div>
 
