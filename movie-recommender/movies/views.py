@@ -18,13 +18,10 @@ class ListMovies(LoginRequiredMixin, ListView):
       user = self.request.user
 
       context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) #where the users have provided a rating
-
       # context['recommended'] = Movie.objects.filter(...)  # Replace with your actual query
 
       return context
-
-
-
+  
 class MovieDetail(LoginRequiredMixin, View):
   def get(self, request, pk):
     movie = Movie.objects.get(pk=pk)
