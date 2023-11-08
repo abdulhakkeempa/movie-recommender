@@ -10,6 +10,21 @@ class ListMovies(LoginRequiredMixin, ListView):
   context_object_name = 'movies'
   template_name = 'movies/movies.html'
 
+  def get_context_data(self, **kwargs):
+      # Call the base implementation first to get a context
+      context = super().get_context_data(**kwargs)
+
+      # Get the current user
+      user = self.request.user
+
+      context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) #where the users have provided a rating
+
+      # context['recommended'] = Movie.objects.filter(...)  # Replace with your actual query
+
+      return context
+
+
+
 class MovieDetail(LoginRequiredMixin, View):
   def get(self, request, pk):
     movie = Movie.objects.get(pk=pk)

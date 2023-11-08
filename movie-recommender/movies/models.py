@@ -42,7 +42,6 @@ class Movie(models.Model):
         except ZeroDivisionError:
             ratings = 0
 
-        print(ratings)
         return ratings
     
 

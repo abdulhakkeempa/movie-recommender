@@ -18,62 +18,21 @@
 <section id="movies" class="p-3">
 
   <div id="latest-movies" class="mt-4 mb-4">
-    <h3>Latest Movies</h3>
+    <h3>All Movies</h3>
     
     <div class="d-flex flex-row pt-3 pb-3" style="gap: 20px; overflow-x: auto;">
 
+      {% for movie in movies %}
       <div class="col-3">
         <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
+          <img src="{{ movie.poster }}" class="card-img standard-image" alt="..." style="aspect-ratio: 16/9; width: 100%;">
           <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-            <a href="{% url 'movies-individual' 0 %}" class="btn btn-primary">&#x23F5;            </a>
+            <h5 class="card-title">{{movie.title}}</h5>
+            <a href="{% url 'movies-individual' movie.id %}" class="btn btn-primary">&#x23F5;            </a>
           </div>
         </div>
-
-
       </div>
-
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
+      {% endfor %}
 
     </div>
 
@@ -85,7 +44,7 @@
     <div class="d-flex flex-row pt-3 pb-3" style="gap: 20px; overflow-x: auto;">
 
 
-      {% for movie in movies %}
+      {% for movie in continue_watching %}
       <div class="col-3">
         <div class="card text-bg-dark">
           <img src="{{ movie.poster }}" class="card-img standard-image" alt="..." style="aspect-ratio: 16/9; width: 100%;">
@@ -94,51 +53,8 @@
             <a href="{% url 'movies-individual' movie.id %}" class="btn btn-primary">&#x23F5;            </a>
           </div>
         </div>
-
-
       </div>
       {% endfor %}
-
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
 
     </div>
 
@@ -146,7 +62,6 @@
 
   <div id="recommended" class="mt-4 mb-4">
     <h3>Recommended for you</h3>
-    
     <div class="d-flex flex-row pt-3 pb-3" style="gap: 20px; overflow-x: auto;">
 
       <div class="col-3">
@@ -156,53 +71,9 @@
             <h5 class="card-title">Peaky Blinders</h5>
           </div>
         </div>
-
-
-      </div>
-
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-3">
-        <div class="card text-bg-dark">
-          <img src="https://cdn.dribbble.com/userupload/9166526/file/original-47f10e55c25f315c4a917ca9e35548aa.png" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Peaky Blinders</h5>
-          </div>
-        </div>
-
-
       </div>
 
     </div>
-
   </div>
 
 </section>
