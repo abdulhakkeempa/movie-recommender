@@ -53,37 +53,3 @@ class MovieDetail(LoginRequiredMixin, View):
     user_movie_rating .save()
     return redirect('movies-individual', pk=pk)
 
-
-def get_content_based_recommendations(title):
-  """
-    This function provides movie recommendations based on content-based filtering. 
-    It uses cosine similarity to find movies that are most similar to the given movie title.
-
-    Args: 
-      title (str): The title of the movie for which recommendations are to be found. 
-                   The title is case-sensitive and must match exactly with the movie titles in the database.
-
-    Returns:
-      list: A list of dictionaries where each dictionary represents a recommended movie. 
-            Each dictionary contains the title of the recommended movie. 
-            The list is sorted in descending order of similarity, with the most similar movie at the top.
-            If the provided movie title does not exist in the database, an empty list is returned.
-
-    Raises:
-      TypeError: If the input title is not a string.
-
-    Example:
-      >>> get_recommendations('The Dark Knight')
-      [{'title': 'The Dark Knight Rises'}, {'title': 'Batman Begins'}, ...]
-  """
-  movie_list = movies[movies['title'].str.contains(title)]
-  if len(movie_list):        
-      idx = movie_list.index[0]
-      sim_scores = list(enumerate(cosine_sim[idx]))
-      sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-      sim_scores = sim_scores[0:11]  # get top 10 similar movies
-      movie_indices = [i[0] for i in sim_scores]
-      recommendations = movies[['title']].iloc[movie_indices]
-      return recommendations.to_list()
-  else:
-      return []
