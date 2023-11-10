@@ -4,6 +4,12 @@ from django.views.generic import ListView
 from movies.models import Movie, UserMovieRating
 from django.contrib.auth.mixins import LoginRequiredMixin
 from movies.recommendations import get_item_based_recommendation, get_content_based_recommendations
+import re
+
+# Function to remove year from movie title
+def remove_year(movie):
+    return re.sub(r'\s\(\d{4}\)', '', movie)
+
 
 class ListMovies(LoginRequiredMixin, ListView):
   model = Movie
@@ -29,7 +35,10 @@ class ListMovies(LoginRequiredMixin, ListView):
         movie_titles = [movie.title for movie in movies]
         recommended_movies = get_content_based_recommendations(movie_titles)
         print(recommended_movies)
-        recommended_movies = Movie.objects.filter(title__in=recommended_movies)
+        # Apply function to each movie in the list
+        cleaned_data = [remove_year(movie) for movie in recommended_movies[0]] 
+        print(cleaned_data)
+        recommended_movies = Movie.objects.filter(title__in=cleaned_data)
         return recommended_movies
 
   def get_user_watched_movies(self, **kwargs):
