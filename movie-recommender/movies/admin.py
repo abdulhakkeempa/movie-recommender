@@ -8,6 +8,7 @@ admin.site.register(UserMovieRating)
 
 
 class MovieAdmin(admin.ModelAdmin):
+  search_fields = ['title']
   list_filter = ['language']
 
 admin.site.register(Movie, MovieAdmin)
