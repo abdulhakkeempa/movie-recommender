@@ -7,8 +7,13 @@ from movies.recommendations import get_item_based_recommendation, get_content_ba
 import re
 
 # Function to remove year from movie title
-def remove_year(movie):
-    return re.sub(r'\s\(\d{4}\)', '', movie)
+def remove_year(movies):
+    # Define a regex pattern to match the parentheses and the year inside
+    pattern = re.compile(r'\s*\([^)]*\)\s*')
+
+    # Use the pattern to replace the matched substring with an empty string
+    movies_cleaned = [pattern.sub('', s) for s in movies]
+    return movies_cleaned
 
 
 class ListMovies(LoginRequiredMixin, ListView):
@@ -23,30 +28,47 @@ class ListMovies(LoginRequiredMixin, ListView):
     # Get the current user
     user = self.request.user
 
-    context['movies'] = Movie.objects.all()[:50]
-    context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) #where the users have provided a rating
-    # context['recommended'] = Movie.objects.filter(...)  # Replace with your actual query
-    print(self.recommend_movies())
+    context['movies'] = Movie.objects.all()[:25] # get the first 25 movies
+    context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) # where the users have provided a rating
+    context['content_recommended'] = self.recommend_movies() # get the content based recommendations
+    context['item_recommended'] = self.suggest_movies() # get the collaborative item-item based recommendations
     return context
 
   def recommend_movies(self, **kwargs):
-      movies = self.get_user_watched_movies()
+      movies = self.get_user_watched_movies(5)
       if movies:
         movie_titles = [movie.title for movie in movies]
         recommended_movies = get_content_based_recommendations(movie_titles)
-        print(recommended_movies)
-        # Apply function to each movie in the list
-        cleaned_data = [remove_year(movie) for movie in recommended_movies[0]] 
-        print(cleaned_data)
+        # remove the year from the movie title
+        cleaned_data = remove_year(recommended_movies[0])
         recommended_movies = Movie.objects.filter(title__in=cleaned_data)
         return recommended_movies
+      
+  def suggest_movies(self, **kwargs):
+    movies = self.get_user_watched_movies(5)
+    if movies:
+      suggested_movies = []
+      for movie in movies:
+        group = {}
+        recommended_movies = get_item_based_recommendation(movie.title)
+        # remove the year from the movie title
+        cleaned_data = remove_year(recommended_movies[0])
+        group[f'{movie.title}'] = Movie.objects.filter(title__in=cleaned_data)
+        suggested_movies.append(group.copy())
+      return suggested_movies
 
-  def get_user_watched_movies(self, **kwargs):
+  def get_user_watched_movies(self, n_watched=5,**kwargs):
     """
       Returns the latest 5 movies the user has watched
+
+      Args:
+        n_watched (int): The number of movies to be returned
+
+      Returns:
+        list: A list of Movie objects
     """
     user = self.request.user
-    return Movie.objects.filter(usermovierating__user=user)[:5]
+    return Movie.objects.filter(usermovierating__user=user)[:n_watched]
   
 class MovieDetail(LoginRequiredMixin, View):
   def get(self, request, pk):

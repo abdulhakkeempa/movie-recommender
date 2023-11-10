@@ -39,7 +39,7 @@ def get_item_based_recommendation(movie_name):
             idx = movies[movies['movieId'] == movie_idx].index
             recommend_frame.append({'Title':movies.iloc[idx]['title'].values[0],'Distance':val[1]})
         df = pd.DataFrame(recommend_frame,index=range(1,n_movies_to_reccomend+1))
-        return df.to_dict('records')
+        return df['Title'].to_list()
     else:
         return []
 
