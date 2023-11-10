@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic import ListView
 from movies.models import Movie, UserMovieRating
 from django.contrib.auth.mixins import LoginRequiredMixin
-from movies.load_models import cosine_sim, movies, csr_data, final_dataset, knn
+from movies.recommendations import get_item_based_recommendation, get_content_based_recommendations
 
 class ListMovies(LoginRequiredMixin, ListView):
   model = Movie
@@ -11,16 +11,33 @@ class ListMovies(LoginRequiredMixin, ListView):
   template_name = 'movies/movies.html'
 
   def get_context_data(self, **kwargs):
-      # Call the base implementation first to get a context
-      context = super().get_context_data(**kwargs)
+    # Call the base implementation first to get a context
+    context = super().get_context_data(**kwargs)
 
-      # Get the current user
-      user = self.request.user
+    # Get the current user
+    user = self.request.user
 
-      context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) #where the users have provided a rating
-      # context['recommended'] = Movie.objects.filter(...)  # Replace with your actual query
+    context['movies'] = Movie.objects.all()[:50]
+    context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) #where the users have provided a rating
+    # context['recommended'] = Movie.objects.filter(...)  # Replace with your actual query
+    print(self.recommend_movies())
+    return context
 
-      return context
+  def recommend_movies(self, **kwargs):
+      movies = self.get_user_watched_movies()
+      if movies:
+        movie_titles = [movie.title for movie in movies]
+        recommended_movies = get_content_based_recommendations(movie_titles)
+        print(recommended_movies)
+        recommended_movies = Movie.objects.filter(title__in=recommended_movies)
+        return recommended_movies
+
+  def get_user_watched_movies(self, **kwargs):
+    """
+      Returns the latest 5 movies the user has watched
+    """
+    user = self.request.user
+    return Movie.objects.filter(usermovierating__user=user)[:5]
   
 class MovieDetail(LoginRequiredMixin, View):
   def get(self, request, pk):

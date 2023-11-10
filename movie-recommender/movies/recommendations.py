@@ -50,7 +50,7 @@ def get_content_based_recommendations(title):
     It uses cosine similarity to find movies that are most similar to the given movie title.
 
     Args: 
-      title (str): The title of the movie for which recommendations are to be found. 
+      title (list): The list of the title of the movie for which recommendations are to be found. 
                    The title is case-sensitive and must match exactly with the movie titles in the database.
 
     Returns:
@@ -66,14 +66,17 @@ def get_content_based_recommendations(title):
       >>> get_recommendations('The Dark Knight')
       [{'title': 'The Dark Knight Rises'}, {'title': 'Batman Begins'}, ...]
   """
-  movie_list = movies[movies['title'].str.contains(title)]
-  if len(movie_list):        
-      idx = movie_list.index[0]
-      sim_scores = list(enumerate(cosine_sim[idx]))
-      sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-      sim_scores = sim_scores[0:11]  # get top 10 similar movies
-      movie_indices = [i[0] for i in sim_scores]
-      recommendations = movies[['title']].iloc[movie_indices]
-      return recommendations.to_list()
-  else:
-      return []
+  recommended_movies = []
+
+  for movie in title:
+    movie_list = movies[movies['title'].str.contains(movie)]
+    if len(movie_list):        
+        idx = movie_list.index[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[0:11]  # get top 10 similar movies
+        movie_indices = [i[0] for i in sim_scores]
+        recommendations = movies[['title']].iloc[movie_indices]
+        recommended_movies.append(recommendations['title'].to_list())
+
+  return recommended_movies
