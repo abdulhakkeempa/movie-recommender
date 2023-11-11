@@ -20,6 +20,7 @@ class ListMovies(LoginRequiredMixin, ListView):
   model = Movie
   context_object_name = 'movies'
   template_name = 'movies/movies.html'
+  login_url = '/login'
 
   def get_context_data(self, **kwargs):
     # Call the base implementation first to get a context
@@ -74,6 +75,8 @@ class ListMovies(LoginRequiredMixin, ListView):
     return Movie.objects.filter(usermovierating__user=user)[:n_watched]
   
 class MovieDetail(LoginRequiredMixin, View):
+  login_url = '/login'
+
   def get(self, request, pk):
     movie = Movie.objects.get(pk=pk)
     rating = int(abs(movie.get_review_values))
@@ -94,7 +97,6 @@ class MovieDetail(LoginRequiredMixin, View):
     rating = request.POST.get('review')
 
     if UserMovieRating.objects.filter(user=user, movie=movie).exists():
-      print(rating)
       user_movie_rating  = UserMovieRating.objects.get(user=user, movie=movie)
       user_movie_rating.rating = rating
       user_movie_rating.save()
@@ -105,6 +107,7 @@ class MovieDetail(LoginRequiredMixin, View):
     return redirect('movies-individual', pk=pk)
 
 class ListAllMovies(LoginRequiredMixin, ListView):
+    login_url = '/login'
     model = Movie      
     context_object_name = 'movies'
     template_name = 'movies/movies-all.html'
