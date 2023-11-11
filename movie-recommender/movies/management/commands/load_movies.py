@@ -23,48 +23,65 @@ class Command(BaseCommand):
             'Authorization': f'Bearer {TMDB_BEARER_TOKEN}',
         }
 
+        custom_index = 222
+
         with open('data/links.csv', 'r') as file:
             reader = csv.reader(file)
             next(reader)
+            # for row in reader:
+            #     movie_id = row[2]  # Assuming movieId is in the first column
+
+            # Manually skip rows until you reach the desired index
+            for _ in range(custom_index - 1):
+                next(reader)
+            
             for row in reader:
-                movie_id = row[2]  # Assuming movieId is in the first column
+                # 'row' contains the data
+                # print(row)
 
-                # Fetch movie data from the API
-                request_uri = f'{TMDB_API}/{movie_id}'
-                print(request_uri)
-                response = requests.get(request_uri, headers=headers)
-                data = response.json()
-                print(data)
+                movie_id = row[2]
 
-                #extracting year from date.
-                print(data['release_date'])
-                release_year = datetime.strptime(data['release_date'], "%Y-%m-%d").year
+                print(movie_id)
 
-                # Create a new Movie object and save it to the database
-                movie = Movie(
-                    title=data['original_title'],
-                    description=data['overview'],
-                    length=int(abs(data['runtime'])),
-                    release_year=release_year,
-                    language=data['original_language'],
-                    poster=f'{TMDB_IMAGE_URL}/{data["backdrop_path"]}',
-                )
-                
-                movie.save()
+                try:
+                    # Fetch movie data from the API
+                    request_uri = f'{TMDB_API}/{movie_id}'
+                    print(request_uri)
+                    response = requests.get(request_uri, headers=headers)
+                    data = response.json()
+                    print(data)
 
-                for genre in data['genres']:
-                    genre_name = genre['name']
-                    genre = Genre.objects.filter(name=genre_name)
+                    #extracting year from date.
+                    print(data['release_date'])
+                    release_year = datetime.strptime(data['release_date'], "%Y-%m-%d").year
 
-                    if genre.exists():
-                        genre_obj = genre.first()
-                    else:
-                        genre_obj = Genre.objects.create(name=genre_name)
+                    # Create a new Movie object and save it to the database
+                    movie = Movie(
+                        title=data['original_title'],
+                        description=data['overview'],
+                        length=int(abs(data['runtime'])),
+                        release_year=release_year,
+                        language=data['original_language'],
+                        poster=f'{TMDB_IMAGE_URL}/{data["backdrop_path"]}',
+                    )
+                    
+                    movie.save()
 
-                    # Add the genre to the movie
-                    movie.genres.add(genre_obj)
+                    for genre in data['genres']:
+                        genre_name = genre['name']
+                        genre = Genre.objects.filter(name=genre_name)
 
-                movie.save()
-                print(f'Saved movie {movie_id} to the database')
+                        if genre.exists():
+                            genre_obj = genre.first()
+                        else:
+                            genre_obj = Genre.objects.create(name=genre_name)
+
+                        # Add the genre to the movie
+                        movie.genres.add(genre_obj)
+
+                    movie.save()
+                    print(f'Saved movie {movie_id} to the database')
+                except Exception as error:
+                    print(f"Failed : MovieId {movie_id} with error - {error}")
 
         print("Data loaded successfully")
