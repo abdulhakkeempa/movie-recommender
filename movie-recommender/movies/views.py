@@ -32,7 +32,6 @@ class ListMovies(LoginRequiredMixin, ListView):
     context['continue_watching'] = Movie.objects.filter(usermovierating__user=user) # where the users have provided a rating
     context['content_recommended'] = self.recommend_movies() # get the content based recommendations
     context['item_recommended'] = self.suggest_movies() # get the collaborative item-item based recommendations
-    print(self.suggest_movies())
     return context
 
   def recommend_movies(self, **kwargs):
@@ -54,7 +53,9 @@ class ListMovies(LoginRequiredMixin, ListView):
         recommended_movies = get_item_based_recommendation(movie.title)
         # remove the year from the movie title
         cleaned_data = remove_year(recommended_movies)
-        group[f'{movie.title}'] = Movie.objects.filter(title__in=cleaned_data)
+        similar_movies = Movie.objects.filter(title__in=cleaned_data)
+        if similar_movies:
+          group[f'{movie.title}'] = similar_movies
       
       suggested_movies.append(group)
       return suggested_movies
@@ -103,3 +104,8 @@ class MovieDetail(LoginRequiredMixin, View):
     user_movie_rating .save()
     return redirect('movies-individual', pk=pk)
 
+class ListAllMovies(LoginRequiredMixin, ListView):
+    model = Movie      
+    context_object_name = 'movies'
+    template_name = 'movies/movies-all.html'
+    paginate_by = 20  
