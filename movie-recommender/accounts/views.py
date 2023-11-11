@@ -24,7 +24,7 @@ class Auth(View):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful.')
-            return redirect('profile')
+            return redirect('movies')
         else:
             messages.error(request, 'Invalid credentials.')
             return redirect('login')
@@ -50,7 +50,7 @@ class UserCreateView(CreateView):
             print(form.cleaned_data)
             form.save()
             user = authenticate(request, email=form.cleaned_data['email'], password=form.cleaned_data['password'])
-            return redirect('profile')
+            return redirect('movies')
         else:
             return render(request, self.template_name, {'form': form.errors})
 
