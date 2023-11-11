@@ -5,8 +5,7 @@ from django.urls import reverse_lazy
 from accounts.models import User
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from accounts.forms import UserCreateForm, UserUpdateForm
+from accounts.forms import UserCreateForm
 
 
 from django.contrib import messages
@@ -38,7 +37,7 @@ class Logout(View):
 class UserCreateView(CreateView):
     form_class = UserCreateForm
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('login')  # Redirect to login page after successful registration
+    success_url = reverse_lazy('movies')  # Redirect to login page after successful registration
 
     def get(self, request):
         #to avoid the rendering the default form
@@ -53,25 +52,3 @@ class UserCreateView(CreateView):
             return redirect('movies')
         else:
             return render(request, self.template_name, {'form': form.errors})
-
-
-class UserUpdateView(LoginRequiredMixin, UpdateView):
-    form_class = UserUpdateForm
-    template_name = 'accounts/profile.html'
-    model = User
-    
-    def get_success_url(self):
-        return reverse_lazy('profile', kwargs={'pk': self.object.pk})  # Redirect to user's profile page after successful update
-
-    def get_object(self, queryset=None):
-        print(self.request.user.id)
-        return self.model.objects.get(id=self.request.user.id)
-    
-        obj = super().get_object(queryset=queryset)
-        if not obj.id == self.request.user.id:  # Ensure users can only update their own profile
-            raise PermissionDenied()
-        return obj
-
-
-def profile(request):
-    return HttpResponse(f"Hi {request.user.name} 👋")

@@ -29,7 +29,6 @@ def get_item_based_recommendation(movie_name):
     n_movies_to_reccomend = 10
     movie_list = movies[movies['title'].str.contains(movie_name)]  
     if len(movie_list):
-        print(movie_list)        
         movie_idx= movie_list.iloc[0]['movieId']
         try:
           movie_idx = final_dataset[final_dataset['movieId'] == movie_idx].index[0]

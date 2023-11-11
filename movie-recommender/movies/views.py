@@ -97,7 +97,6 @@ class MovieDetail(LoginRequiredMixin, View):
     rating = request.POST.get('review')
 
     if UserMovieRating.objects.filter(user=user, movie=movie).exists():
-      print(rating)
       user_movie_rating  = UserMovieRating.objects.get(user=user, movie=movie)
       user_movie_rating.rating = rating
       user_movie_rating.save()
