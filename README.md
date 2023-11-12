@@ -25,14 +25,14 @@ For example, when comparing movies 'A' and 'B', we analyze the ratings given by 
 
 This approach will help us solve the cold start problem when a new user comes in. Also, Content-Based Filtering is provided in parallel to recommend movies on a similar basis by analyzing the cosine similarity.
 
-### Screenshots
+## Screenshots
 
 ![image](https://github.com/abdulhakkeempa/movie-recommender/assets/92361680/79204d2d-7226-433c-a73c-a5c65e77d727)
 ![image](https://github.com/abdulhakkeempa/movie-recommender/assets/92361680/cafb99e6-dd0d-4f6f-99dd-c2cedfe369cc)
 ![image](https://github.com/abdulhakkeempa/movie-recommender/assets/92361680/e2a13d33-6fa0-49e1-b0c2-f5c46b7f7d43)
 ![image](https://github.com/abdulhakkeempa/movie-recommender/assets/92361680/442ea2e8-c432-4212-885b-5e7b754c8b99)
 
-### How to Install and Run the Project
+## How to Install and Run the Project
 1. `git clone https://github.com/abdulhakkeempa/movie-recommender.git`
 2. `cd movie-recommender`
 3. Create a venv and activate it.
@@ -54,7 +54,7 @@ This approach will help us solve the cold start problem when a new user comes in
 8.  Create an account and use the platform.  
     Go to `http://localhost:8000/register`
 
-#### If you want to access the admin panel and add movies from the admin panel
+### If you want to access the admin panel and add movies from the admin panel
 1. `python manage.py createsuperuser`
 2. `python manage.py runserver`
 3. Login with the newly created admin credentials.  
