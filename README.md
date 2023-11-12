@@ -48,7 +48,7 @@ This approach will help us solve the cold start problem when a new user comes in
     ```
 4. `pip install -r requirements.txt`
 5. Copy .env.example as .env and fill in the values.
-6. Run this command to load movies which are in the dataset from TMDB. 
+6. Run this command to load movies which are in the dataset from TMDB.  
    `python manage.py load_movies` 
 7. `python manage.py runserver`
 8.  Create an account and use the platform.  
